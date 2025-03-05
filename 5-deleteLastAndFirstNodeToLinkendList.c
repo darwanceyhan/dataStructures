@@ -57,6 +57,15 @@ void insert(int x, int y)
   insertData->next = before;
 }
 
+void deleteFirst()
+{
+  struct Node *second = (struct Node *)malloc(sizeof(struct Node));
+
+  second = start->next;
+  free(start);
+  start = second;
+}
+
 void deleteLast()
 {
   if (start != NULL)
@@ -98,7 +107,8 @@ int main()
     printf("3. Insert (Insert after a node)\n");
     printf("4. Print the list\n");
     printf("5. Delete (Delete last node)\n");
-    printf("6. Exit\n");
+    printf("6. Delete (Delete first node)\n");
+    printf("7. Exit\n");
     printf("Enter your choice: ");
     scanf("%d", &choice);
 
@@ -136,6 +146,10 @@ int main()
       break;
 
     case 6:
+      deleteFirst();
+      break;
+
+    case 7:
       printf("Exiting...\n");
       exit(0);
 
