@@ -1,11 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-struct Node
-{
-  int data;
-  struct Node *next;
-};
+#include "linked_list.h"
 
 struct Node *start = NULL;
 struct Node *q = NULL;
@@ -47,14 +42,76 @@ void insert(int x, int y)
 
   insertData->data = y;
   q = start;
-  while (q->next->data != x)
+
+  while (q != NULL && q->data != x)
   {
     q = q->next;
   }
-  struct Node *before = (struct Node *)malloc(sizeof(struct Node));
-  before = q->next;
-  q->next = insertData;
-  insertData->next = before;
+
+  if (q != NULL)
+  {
+    struct Node *before = q->next;
+    q->next = insertData;
+    insertData->next = before;
+  }
+  else
+  {
+    printf("Value %d not found in the list.\n", x);
+    free(insertData);
+  }
+}
+
+void deleteFirst()
+{
+  if (start != NULL)
+  {
+    struct Node *second = start->next;
+    free(start);
+    start = second;
+  }
+  else
+  {
+    printf("List is empty.\n");
+  }
+}
+
+void deleteLast()
+{
+  if (start != NULL)
+  {
+    if (start->next == NULL)
+    {
+      free(start);
+      start = NULL;
+      return;
+    }
+
+    q = start;
+    while (q->next->next != NULL)
+    {
+      q = q->next;
+    }
+    free(q->next);
+    q->next = NULL;
+  }
+  else
+  {
+    printf("List is empty.\n");
+  }
+}
+
+void reverse()
+{
+  struct Node *prev = NULL, *current = start, *next = NULL;
+
+  while (current != NULL)
+  {
+    next = current->next;
+    current->next = prev;
+    prev = current;
+    current = next;
+  }
+  start = prev;
 }
 
 void print()
@@ -79,7 +136,10 @@ int main()
     printf("2. Prepend (Add to the beginning)\n");
     printf("3. Insert (Insert after a node)\n");
     printf("4. Print the list\n");
-    printf("5. Exit\n");
+    printf("5. Delete (Delete last node)\n");
+    printf("6. Delete (Delete first node)\n");
+    printf("7. Exit\n");
+    printf("8. Reverse (Ters çevir)\n");
     printf("Enter your choice: ");
     scanf("%d", &choice);
 
@@ -113,8 +173,21 @@ int main()
       break;
 
     case 5:
+      deleteLast();
+      break;
+
+    case 6:
+      deleteFirst();
+      break;
+
+    case 7:
       printf("Exiting...\n");
       exit(0);
+
+    case 8:
+      reverse();
+      printf("List reversed.\n");
+      break;
 
     default:
       printf("Invalid choice, please try again.\n");
